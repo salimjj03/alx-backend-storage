@@ -6,20 +6,15 @@ CREATE PROCEDURE AddBonus(
 	IN score INT
 )
 BEGIN
-	DECLARE project_id INT;
-
-    	SELECT id INTO project_id
-    	FROM projects
-    	WHERE name = project_name;
-
-    	IF project_id IS NULL THEN
+	iF (SELECT COUNT(*) FROM projects WHERE name = project_name) = 0
+	THEN
         	INSERT INTO projects (name) VALUES (project_name);
     	END IF;
-	INSERT INTO corrections(user_id, project_name, score)
+	INSERT INTO corrections(user_id, project_id, score)
 	VALUES (
 		user_id,
-		SELECT id FROM projects WHERE name = project_name,
+		(SELECT id FROM projects WHERE name = project_name),
 		score
-	)
-END
+	);
+END$
 DELIMITER ;
