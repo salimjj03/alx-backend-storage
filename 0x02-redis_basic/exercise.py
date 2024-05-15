@@ -25,6 +25,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @staticmethod
     def count_calls(method: Callable) -> Callable:
         """ This is the constructor method. """
 
