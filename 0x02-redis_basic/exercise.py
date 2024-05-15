@@ -39,13 +39,13 @@ class Cache:
         return wrapper
 
     def call_history(method: Callable) -> Callable:
-    """
-    Decorator to store the history of inputs and
-    outputs for a particular function.
-    """
-    key = method.__qualname__
-    inputs = key + ":inputs"
-    outputs = key + ":outputs"
+        """
+        Decorator to store the history of inputs and
+        outputs for a particular function.
+        """
+        key = method.__qualname__
+        inputs = key + ":inputs"
+        outputs = key + ":outputs"
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):  # sourcery skip: avoid-builtin-shadow
