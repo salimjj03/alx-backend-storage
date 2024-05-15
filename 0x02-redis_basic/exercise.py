@@ -24,6 +24,18 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    def count_calls(method: Callable) -> Callable:
+        """ This is the constructor method. """
+
+        @wraps(method)
+        def wrapper(self, *args, **kwargs):
+            """ This is the constructor method. """
+
+            key = method.__qualname__
+            self._redis.incr(key)
+            return method(self, *args, **kwargs)
+        return wrapper
+
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ store method that takes a data argument and
         returns a string. The method should generate a
