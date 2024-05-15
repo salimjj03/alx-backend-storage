@@ -38,6 +38,25 @@ class Cache:
             return method(self, *args, **kwargs)
         return wrapper
 
+    def call_history(method: Callable) -> Callable:
+    """
+    Decorator to store the history of inputs and
+    outputs for a particular function.
+    """
+    key = method.__qualname__
+    inputs = key + ":inputs"
+    outputs = key + ":outputs"
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):  # sourcery skip: avoid-builtin-shadow
+        """ Wrapper for decorator functionality """
+        self._redis.rpush(inputs, str(args))
+        data = method(self, *args, **kwargs)
+        self._redis.rpush(outputs, str(data))
+        return data
+
+    return wrapper
+
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ store method that takes a data argument and
         returns a string. The method should generate a
